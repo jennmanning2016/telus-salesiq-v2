@@ -1,0 +1,1152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TELUS SalesIQ V2 - Intelligent Sales Enablement Platform</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4B0082 0%, #66CC00 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4B0082 0%, #2E0054 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .version-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #66CC00;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .header .subtitle {
+            margin: 5px 0 0 0;
+            font-size: 1.4em;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 3px solid #66CC00;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: #f1f5f9;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #4B0082;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            color: #4B0082;
+            border-bottom: 3px solid #66CC00;
+        }
+        
+        .nav-tab:hover {
+            background: #e2e8f0;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .prompt-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .prompt-header {
+            background: linear-gradient(135deg, #4B0082 0%, #66CC00 100%);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .prompt-content {
+            padding: 20px;
+            background: #f8fafc;
+        }
+        
+        .prompt-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4B0082;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        
+        .copy-btn, .edit-btn, .delete-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 5px;
+        }
+        
+        .copy-btn:hover, .edit-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .delete-btn:hover {
+            background: rgba(220, 38, 38, 0.8);
+        }
+        
+        .category-tag {
+            background: #66CC00;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 10px;
+        }
+        
+        .business-unit-tag {
+            background: #4B0082;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+        
+        .user-tag {
+            background: #f59e0b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+        
+        .shared-tag {
+            background: #10b981 !important;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+        
+        .note {
+            background: linear-gradient(135deg, #E6F7FF 0%, #F0F9FF 100%);
+            border: 2px solid #66CC00;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #4B0082;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #66CC00;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #4B0082;
+        }
+        
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .add-prompt-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #66CC00;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .add-prompt-btn {
+            background: linear-gradient(135deg, #4B0082 0%, #66CC00 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .add-prompt-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(75, 0, 130, 0.3);
+        }
+        
+        .form-section {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #4B0082;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #66CC00;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: #4B0082;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            background: #66CC00;
+        }
+        
+        .btn-secondary {
+            background: #64748b;
+        }
+        
+        .btn-secondary:hover {
+            background: #475569;
+        }
+        
+        .footer {
+            background: #4B0082;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .footer a {
+            color: #66CC00;
+            text-decoration: none;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        
+        .user-prompts-section {
+            margin-top: 30px;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 20px;
+        }
+        
+        .new-feature-highlight {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+      const files = {}
+      
+      window.fs = {}
+      window.fs.readFile = (fileName) => {
+        return new Promise((resolve) => {
+          const content = files[fileName]
+          const decoded = atob(content)
+          const arr = new Uint8Array(decoded.length)
+          for (let i = 0; i < decoded.length; i++) {
+            arr[i] = decoded.charCodeAt(i)
+          }
+          resolve(arr)
+        })
+      }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="version-badge">V2.0 - Team Sharing</div>
+            <h1>TELUS SalesIQ</h1>
+            <div class="subtitle">Intelligent Sales Enablement Platform</div>
+            <p>AI-powered prompts for sales excellence with team collaboration</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('dashboard')">Dashboard</button>
+            <button class="nav-tab" onclick="showTab('agriculture')">Agriculture</button>
+            <button class="nav-tab" onclick="showTab('consumer-goods')">Consumer Goods</button>
+            <button class="nav-tab" onclick="showTab('general')">General Sales</button>
+            <button class="nav-tab" onclick="showTab('my-prompts')">My Prompts</button>
+        </div>
+        
+        <div class="content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <h2>📊 Dashboard</h2>
+                
+                <div class="new-feature-highlight">
+                    <strong>🆕 NEW in V2:</strong> Share your custom prompts with your team! Create prompts in "My Prompts" and use the "Share" button to make them available in the appropriate Business Unit tabs.
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalPrompts">12</div>
+                        <div class="stat-label">Total Prompts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="myPromptsCount">0</div>
+                        <div class="stat-label">My Custom Prompts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="sharedPromptsCount">0</div>
+                        <div class="stat-label">Team Shared Prompts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">4.8</div>
+                        <div class="stat-label">Avg Rating</div>
+                    </div>
+                </div>
+                
+                <div class="note">
+                    <strong>Welcome to TELUS SalesIQ V2!</strong> Your intelligent sales enablement platform with AI-powered prompts for Agriculture, Consumer Goods, and general sales activities. Create your own custom prompts in the "My Prompts" section and share them with your team using the new collaboration features!
+                </div>
+            </div>
+
+            <!-- Agriculture Tab -->
+            <div id="agriculture" class="tab-content">
+                <h2>🌾 Agriculture Hub</h2>
+                
+                <div class="note">
+                    <strong>Agriculture Focus:</strong> Farm-to-fork value chain prompts for producers, processors, distributors, and retailers.
+                </div>
+                
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>
+                            <span class="business-unit-tag">Agriculture</span>
+                            <span class="category-tag">Prospecting</span>
+                            Agricultural Producer Outreach
+                        </span>
+                        <button class="copy-btn" onclick="copyText('ag-producer')">Copy</button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-text" id="ag-producer">Act as an expert TELUS sales professional specializing in Agriculture technology solutions. Help me with outreach to large-scale agricultural producers and agribusiness operations.
+
+Context:
+- Business Unit: TELUS Agriculture
+- Target: Large-scale crop/livestock producers, agribusiness conglomerates, agricultural cooperatives
+- Focus: Data-driven insights, precision agriculture, supply chain optimization
+
+Provide:
+1. Outreach framework for agricultural producers
+2. Key pain points in modern farming operations
+3. Questions about current farming challenges
+4. Value proposition for agricultural operations
+5. Success metrics for producer engagement
+
+Focus areas:
+- Precision agriculture and data analytics
+- Supply chain traceability
+- Sustainability and regulatory compliance
+- Yield optimization and cost reduction
+
+Customize for:
+- Operation type: [Crop/Livestock/Mixed]
+- Geographic scope: [Regional/National/International]
+- Technology adoption: [Traditional/Emerging/Advanced]</div>
+                    </div>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>
+                            <span class="business-unit-tag">Agriculture</span>
+                            <span class="category-tag">Sustainability</span>
+                            Sustainability & ESG Outreach
+                        </span>
+                        <button class="copy-btn" onclick="copyText('ag-sustainability')">Copy</button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-text" id="ag-sustainability">Act as an expert TELUS sales professional specializing in Agriculture technology solutions with a focus on sustainability and ESG compliance.
+
+Context:
+- Business Unit: TELUS Agriculture
+- Target: Companies across agricultural value chain with strong sustainability commitments
+- Focus: ESG reporting, carbon footprint reduction, sustainable sourcing
+
+Provide:
+1. Sustainability-focused outreach strategies
+2. Value propositions for ESG compliance
+3. Questions about sustainability goals and challenges
+4. Best practices for sustainability relationships
+5. Success metrics for sustainability partnerships
+
+Focus areas:
+- Carbon footprint measurement and reduction
+- Regenerative agriculture practices
+- Sustainable sourcing and transparency
+- ESG reporting and compliance
+- Water usage and waste reduction
+
+Customize for:
+- Sustainability focus: [Carbon/Water/Biodiversity/Social]
+- Regulatory requirements: [EU taxonomy/SEC reporting/Voluntary]
+- Stakeholder pressure: [Investors/Consumers/Regulators]</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consumer Goods Tab -->
+            <div id="consumer-goods" class="tab-content">
+                <h2>🛒 Consumer Goods Hub</h2>
+                
+                <div class="note">
+                    <strong>Consumer Goods Focus:</strong> CPG manufacturers and sales agencies. <strong>Important:</strong> Consumer Goods does NOT sell to retailers or distributors directly.
+                </div>
+                
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>
+                            <span class="business-unit-tag">Consumer Goods</span>
+                            <span class="category-tag">Prospecting</span>
+                            CPG Manufacturer Outreach
+                        </span>
+                        <button class="copy-btn" onclick="copyText('cpg-outreach')">Copy</button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-text" id="cpg-outreach">Act as an expert TELUS sales professional specializing in Consumer Goods technology solutions. Help me with cold outreach to Consumer Packaged Goods (CPG) manufacturers.
+
+Context:
+- Business Unit: TELUS Consumer Goods
+- Target: CPG Manufacturers (Beverage, Protein, Health & Hygiene, Baked Goods)
+- Focus: Trade promotion management and distribution optimization
+
+Provide:
+1. Outreach framework for CPG manufacturers
+2. Key pain points in retail/food service distribution
+3. Questions about their trade promotion challenges
+4. Value proposition for manufacturing operations
+5. Success metrics for manufacturer engagement
+
+Focus areas:
+- Trade promotion efficiency
+- Multi-channel distribution (retail & food service)
+- Supply chain optimization
+- Integration with existing ERP/trade systems
+
+Customize for:
+- Manufacturer category: [Beverage/Protein/Health & Hygiene/Baked Goods]
+- Company size: [Regional/National/Multinational]
+- Current trade system: [Manual/Legacy/Advanced]</div>
+                    </div>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>
+                            <span class="business-unit-tag">Consumer Goods</span>
+                            <span class="category-tag">Channel Partners</span>
+                            Sales Agency Partnerships
+                        </span>
+                        <button class="copy-btn" onclick="copyText('sales-agency')">Copy</button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-text" id="sales-agency">Act as an expert TELUS sales professional specializing in Consumer Goods technology solutions. Help me develop partnerships with sales agencies and brokers who represent CPG manufacturers.
+
+Context:
+- Business Unit: TELUS Consumer Goods
+- Target: Sales Agencies and Brokers representing CPG manufacturers
+- Objective: Partner with agencies to reach their manufacturer clients
+
+Provide:
+1. Agency partnership strategies
+2. Value propositions for agency relationships
+3. Questions about their manufacturer client base
+4. Joint sales approaches and co-selling
+5. Success metrics for agency partnerships
+
+Focus areas:
+- How our TELUS solutions benefit their manufacturer clients
+- Commission and partnership structures
+- Training and support for agency teams
+- Lead sharing and opportunity management
+
+Customize for:
+- Agency specialization: [Food & Beverage/Health & Beauty/General CPG]
+- Geographic territory: [Regional/National]
+- Client portfolio: [Manufacturer types they represent]</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- General Sales Tab -->
+            <div id="general" class="tab-content">
+                <h2>🎯 General Sales Hub</h2>
+                
+                <div class="note">
+                    <strong>Universal Sales Tools:</strong> Cross-functional prompts that work across all TELUS business units.
+                </div>
+                
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>
+                            <span class="category-tag">Territory Planning</span>
+                            Territory Funnel Analysis & Strategy
+                        </span>
+                        <button class="copy-btn" onclick="copyText('territory-funnel')">Copy</button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-text" id="territory-funnel">My funnel is [Bloated/Anemic/Stagnant/Unqualified]. Help me identify five Funnel Building or progression strategies to use in my Territory Plan.
+
+Provide the answers in a tabular view with:
+- Column 1: Funnel Build title
+- Column 2: Details associated with the strategy
+- Column 3: Typical KPIs associated with the idea
+
+Focus on actionable strategies that can be implemented within the next 90 days. Include both short-term fixes and long-term funnel health improvements.
+
+Additional context:
+- Territory size: [Add details]
+- Current funnel state: [Describe specific issues]
+- Target market: [Consumer Goods/Agriculture/Other]
+- Resources available: [Team size, budget, tools]</div>
+                    </div>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>
+                            <span class="category-tag">Account Planning</span>
+                            Industry Trends & Market Analysis
+                        </span>
+                        <button class="copy-btn" onclick="copyText('account-trends')">Copy</button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-text" id="account-trends">For [Company] summarize the key industry or market trends that will impact their business for 2025 and 2026.
+
+Classify these trends as either:
+- Demographic
+- Regulatory
+- Social
+- Technology
+- Business process change
+
+Present the information in a format that can be used in an Account Plan. Include:
+1. Trend description and impact timeline
+2. Potential business implications (positive/negative)
+3. How our TELUS solutions can help address these trends
+4. Recommended discussion points for client conversations
+
+Additional context:
+- Company industry: [Specify sector]
+- Company size: [Revenue/employees]
+- Geographic focus: [Regional/National/Global]
+- Current challenges: [Known pain points]</div>
+                    </div>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>
+                            <span class="category-tag">Deal Planning</span>
+                            Company Analysis for Deal Strategy
+                        </span>
+                        <button class="copy-btn" onclick="copyText('deal-analysis')">Copy</button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-text" id="deal-analysis">Describe [Company] major lines of business, their core customers and industries, market conditions and competitive threats.
+
+Outline their main business goals for 2025 and 2026.
+
+Present the information in a bullet list format that will be used in a Deal Plan associated with [Product].
+
+Structure the analysis as follows:
+• Business Overview
+  - Major lines of business
+  - Core customer segments
+  - Primary industries served
+
+• Market Position
+  - Current market conditions
+  - Competitive landscape
+  - Key competitive threats
+
+• Strategic Goals 2025-2026
+  - Growth objectives
+  - Operational priorities
+  - Technology initiatives
+
+• Deal Implications
+  - How our TELUS solution aligns with their goals
+  - Potential objections and concerns
+  - Value proposition alignment
+
+Additional context:
+- Deal size: [Expected value]
+- Decision timeline: [Urgency factors]
+- Key stakeholders: [Decision makers]
+- Competitive situation: [Other vendors]</div>
+                    </div>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>
+                            <span class="category-tag">Meeting Prep</span>
+                            Client Meeting Preparation
+                        </span>
+                        <button class="copy-btn" onclick="copyText('meeting-prep')">Copy</button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-text" id="meeting-prep">Help me prepare for a TELUS meeting with [Company] on [Date].
+
+Meeting type: [Discovery/Demo/Proposal/Negotiation/Check-in]
+
+Provide:
+1. Pre-meeting research checklist
+2. Key questions to ask based on meeting type
+3. Talking points and value propositions
+4. Potential objections and responses
+5. Follow-up action planning
+
+Research areas to cover:
+- Recent company news and developments
+- Industry trends affecting their business
+- Key stakeholders and their priorities
+- Previous TELUS interactions and relationship history
+
+Customize for:
+- Meeting participants: [List attendees and roles]
+- Meeting objectives: [Desired outcomes]
+- Company background: [Industry, size, challenges]
+- Our solution relevance: [How TELUS can help]</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Prompts Tab -->
+            <div id="my-prompts" class="tab-content">
+                <h2>📝 My Prompts</h2>
+                
+                <div class="add-prompt-section">
+                    <h3 style="color: #4B0082; margin-top: 0;">Create Your Own Prompt</h3>
+                    <p>Share your successful prompts with the team to help everyone improve their sales performance. <strong>New in V2:</strong> Use the "Share" button to make your prompts visible to your team in the appropriate Business Unit tabs!</p>
+                    <button class="add-prompt-btn" onclick="toggleAddForm()">➕ Add New Prompt</button>
+                </div>
+
+                <div id="addPromptForm" class="form-section">
+                    <h3 style="color: #4B0082; margin-top: 0;">New Prompt Details</h3>
+                    <form onsubmit="savePrompt(event)">
+                        <div class="form-group">
+                            <label for="promptTitle">Prompt Title *</label>
+                            <input type="text" id="promptTitle" required placeholder="e.g., Cold Email for SaaS Prospects">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptCategory">Category *</label>
+                            <select id="promptCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Prospecting">Prospecting</option>
+                                <option value="Account Planning">Account Planning</option>
+                                <option value="Deal Planning">Deal Planning</option>
+                                <option value="Objection Handling">Objection Handling</option>
+                                <option value="Meeting Prep">Meeting Prep</option>
+                                <option value="Competitive Strategy">Competitive Strategy</option>
+                                <option value="Proposals">Proposals</option>
+                                <option value="Follow-up">Follow-up</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptBusinessUnit">Business Unit (for sharing)</label>
+                            <select id="promptBusinessUnit">
+                                <option value="">General (All Units)</option>
+                                <option value="Consumer Goods">Consumer Goods</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Digital Solutions">Digital Solutions</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptText">Prompt Text *</label>
+                            <textarea id="promptText" required placeholder="Enter your prompt here. Use [brackets] for customizable fields like [Company Name], [Product], etc."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptDescription">Description (optional)</label>
+                            <textarea id="promptDescription" rows="3" placeholder="Brief description of when and how to use this prompt"></textarea>
+                        </div>
+                        
+                        <div>
+                            <button type="submit" class="btn">💾 Save Prompt</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelAddForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="userPromptsContainer">
+                    <!-- User prompts will be displayed here -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 TELUS Corporation. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            <p>Powered by FueliX - TELUS Generative AI Platform | <strong>Version 2.0 - Team Collaboration</strong></p>
+        </div>
+    </div>
+
+    <script>
+        // User prompts storage
+        var userPrompts = JSON.parse(localStorage.getItem('telusUserPromptsV2')) || [];
+        var sharedPrompts = JSON.parse(localStorage.getItem('telusSharedPromptsV2')) || [];
+        var editingPromptId = null;
+
+        // Initialize the app
+        updateStats();
+        displayUserPrompts();
+        displayBusinessUnitPrompts();
+
+        function showTab(tabName) {
+            // Hide all tabs
+            var tabs = document.querySelectorAll('.tab-content');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Remove active from nav buttons
+            var navTabs = document.querySelectorAll('.nav-tab');
+            for (var i = 0; i < navTabs.length; i++) {
+                navTabs[i].classList.remove('active');
+            }
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Make nav button active
+            event.target.classList.add('active');
+            
+            // Hide add form when switching tabs
+            if (tabName !== 'my-prompts') {
+                hideAddForm();
+            }
+        }
+
+        function copyText(elementId) {
+            var element = document.getElementById(elementId);
+            var text = element.textContent || element.innerText;
+            
+            // Create temporary textarea
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            
+            // Select and copy
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Remove temporary element
+            document.body.removeChild(textarea);
+            
+            // Show feedback
+            var button = event.target;
+            var originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.background = 'rgba(102, 204, 0, 0.8)';
+            
+            setTimeout(function() {
+                button.textContent = originalText;
+                button.style.background = 'rgba(255,255,255,0.2)';
+            }, 2000);
+        }
+
+        function promoteToShared(promptId) {
+            var prompt = userPrompts.find(function(p) { return p.id === promptId; });
+            if (!prompt) return;
+            
+            // Add to shared prompts if not already there
+            var existingShared = sharedPrompts.find(function(p) { return p.id === promptId; });
+            if (!existingShared) {
+                prompt.isShared = true;
+                prompt.sharedDate = new Date().toISOString();
+                sharedPrompts.push(prompt);
+                localStorage.setItem('telusSharedPromptsV2', JSON.stringify(sharedPrompts));
+                
+                // Refresh displays
+                displayUserPrompts();
+                displayBusinessUnitPrompts();
+                updateStats();
+                
+                alert('Prompt promoted to ' + (prompt.businessUnit || 'General Sales') + ' section!');
+            }
+        }
+
+        function displayBusinessUnitPrompts() {
+            displaySharedPromptsInTab('agriculture', 'Agriculture');
+            displaySharedPromptsInTab('consumer-goods', 'Consumer Goods');
+            displaySharedPromptsInTab('general', ''); // General includes prompts with no business unit
+        }
+
+        function displaySharedPromptsInTab(tabId, businessUnit) {
+            var tab = document.getElementById(tabId);
+            var existingUserPrompts = tab.querySelector('.user-prompts-section');
+            
+            // Remove existing user prompts section
+            if (existingUserPrompts) {
+                existingUserPrompts.remove();
+            }
+            
+            // Filter shared prompts for this business unit
+            var relevantPrompts = sharedPrompts.filter(function(prompt) {
+                if (businessUnit === '') {
+                    // General tab shows prompts with no business unit or "General" business unit
+                    return !prompt.businessUnit || prompt.businessUnit === '' || prompt.businessUnit === 'General';
+                }
+                return prompt.businessUnit === businessUnit;
+            });
+            
+            if (relevantPrompts.length > 0) {
+                var userPromptsHtml = '<div class="user-prompts-section"><h3 style="color: #4B0082; margin-top: 30px; border-top: 2px solid #e2e8f0; padding-top: 20px;">🤝 Team Shared Prompts</h3>';
+                
+                for (var i = 0; i < relevantPrompts.length; i++) {
+                    var prompt = relevantPrompts[i];
+                    var promptId = 'shared-' + prompt.id;
+                    
+                    userPromptsHtml += '<div class="prompt-card">';
+                    userPromptsHtml += '<div class="prompt-header">';
+                    userPromptsHtml += '<span>';
+                    if (prompt.businessUnit) {
+                        userPromptsHtml += '<span class="business-unit-tag">' + prompt.businessUnit + '</span>';
+                    }
+                    userPromptsHtml += '<span class="category-tag">' + prompt.category + '</span>';
+                    userPromptsHtml += '<span class="shared-tag">Team</span>';
+                    userPromptsHtml += prompt.title;
+                    userPromptsHtml += '</span>';
+                    userPromptsHtml += '<button class="copy-btn" onclick="copyText(\'' + promptId + '\')">Copy</button>';
+                    userPromptsHtml += '</div>';
+                    userPromptsHtml += '<div class="prompt-content">';
+                    if (prompt.description) {
+                        userPromptsHtml += '<p style="margin-top: 0; color: #64748b; font-style: italic;">' + prompt.description + '</p>';
+                    }
+                    userPromptsHtml += '<div class="prompt-text" id="' + promptId + '">' + prompt.text + '</div>';
+                    userPromptsHtml += '<div style="margin-top: 10px; font-size: 0.8em; color: #64748b;">';
+                    userPromptsHtml += 'Shared by: ' + prompt.author + ' | ';
+                    userPromptsHtml += 'Created: ' + new Date(prompt.dateCreated).toLocaleDateString();
+                    userPromptsHtml += '</div>';
+                    userPromptsHtml += '</div>';
+                    userPromptsHtml += '</div>';
+                }
+                
+                userPromptsHtml += '</div>';
+                tab.insertAdjacentHTML('beforeend', userPromptsHtml);
+            }
+        }
+
+        function toggleAddForm() {
+            var form = document.getElementById('addPromptForm');
+            if (form.classList.contains('active')) {
+                hideAddForm();
+            } else {
+                showAddForm();
+            }
+        }
+
+        function showAddForm() {
+            document.getElementById('addPromptForm').classList.add('active');
+            document.querySelector('.add-prompt-btn').textContent = '❌ Cancel';
+        }
+
+        function hideAddForm() {
+            document.getElementById('addPromptForm').classList.remove('active');
+            document.querySelector('.add-prompt-btn').textContent = '➕ Add New Prompt';
+            clearForm();
+        }
+
+        function cancelAddForm() {
+            hideAddForm();
+        }
+
+        function clearForm() {
+            document.getElementById('promptTitle').value = '';
+            document.getElementById('promptCategory').value = '';
+            document.getElementById('promptBusinessUnit').value = '';
+            document.getElementById('promptText').value = '';
+            document.getElementById('promptDescription').value = '';
+            editingPromptId = null;
+        }
+
+        function savePrompt(event) {
+            event.preventDefault();
+            
+            var promptData = {
+                id: editingPromptId || 'user-' + Date.now(),
+                title: document.getElementById('promptTitle').value,
+                category: document.getElementById('promptCategory').value,
+                businessUnit: document.getElementById('promptBusinessUnit').value,
+                text: document.getElementById('promptText').value,
+                description: document.getElementById('promptDescription').value,
+                dateCreated: editingPromptId ? 
+                    userPrompts.find(function(p) { return p.id === editingPromptId; }).dateCreated : 
+                    new Date().toISOString(),
+                dateModified: new Date().toISOString(),
+                author: 'Current User'
+            };
+
+            if (editingPromptId) {
+                // Edit existing prompt
+                var index = userPrompts.findIndex(function(p) { return p.id === editingPromptId; });
+                userPrompts[index] = promptData;
+                
+                // Update shared prompt if it exists
+                var sharedIndex = sharedPrompts.findIndex(function(p) { return p.id === editingPromptId; });
+                if (sharedIndex !== -1) {
+                    sharedPrompts[sharedIndex] = promptData;
+                    localStorage.setItem('telusSharedPromptsV2', JSON.stringify(sharedPrompts));
+                }
+            } else {
+                // Add new prompt
+                userPrompts.push(promptData);
+            }
+
+            // Save to localStorage
+            localStorage.setItem('telusUserPromptsV2', JSON.stringify(userPrompts));
+            
+            // Update display
+            displayUserPrompts();
+            displayBusinessUnitPrompts();
+            updateStats();
+            hideAddForm();
+            
+            alert('Prompt saved successfully!');
+        }
+
+        function displayUserPrompts() {
+            var container = document.getElementById('userPromptsContainer');
+            
+            if (userPrompts.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No custom prompts yet</h3><p>Click "Add New Prompt" to create your first custom prompt!</p></div>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < userPrompts.length; i++) {
+                var prompt = userPrompts[i];
+                var isShared = sharedPrompts.some(function(p) { return p.id === prompt.id; });
+                
+                html += '<div class="prompt-card">';
+                html += '<div class="prompt-header">';
+                html += '<span>';
+                if (prompt.businessUnit) {
+                    html += '<span class="business-unit-tag">' + prompt.businessUnit + '</span>';
+                }
+                html += '<span class="category-tag">' + prompt.category + '</span>';
+                html += '<span class="user-tag">Custom</span>';
+                if (isShared) {
+                    html += '<span class="shared-tag">Shared</span>';
+                }
+                html += prompt.title;
+                html += '</span>';
+                html += '<div>';
+                html += '<button class="copy-btn" onclick="copyUserPrompt(\'' + prompt.id + '\')">Copy</button>';
+                html += '<button class="edit-btn" onclick="editPrompt(\'' + prompt.id + '\')">Edit</button>';
+                if (!isShared) {
+                    html += '<button class="edit-btn" onclick="promoteToShared(\'' + prompt.id + '\')" style="background: rgba(16, 185, 129, 0.8);">Share</button>';
+                }
+                html += '<button class="delete-btn" onclick="deletePrompt(\'' + prompt.id + '\')">Delete</button>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="prompt-content">';
+                if (prompt.description) {
+                    html += '<p style="margin-top: 0; color: #64748b; font-style: italic;">' + prompt.description + '</p>';
+                }
+                html += '<div class="prompt-text" id="' + prompt.id + '">' + prompt.text + '</div>';
+                html += '<div style="margin-top: 10px; font-size: 0.8em; color: #64748b;">';
+                html += 'Created: ' + new Date(prompt.dateCreated).toLocaleDateString();
+                if (prompt.dateModified !== prompt.dateCreated) {
+                    html += ' | Modified: ' + new Date(prompt.dateModified).toLocaleDateString();
+                }
+                if (isShared) {
+                    html += ' | <strong style="color: #10b981;">Shared to team</strong>';
+                }
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function copyUserPrompt(promptId) {
+            var element = document.getElementById(promptId);
+            var text = element.textContent || element.innerText;
+            
+            // Create temporary textarea
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            
+            // Select and copy
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Remove temporary element
+            document.body.removeChild(textarea);
+            
+            // Show feedback
+            var button = event.target;
+            var originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.background = 'rgba(102, 204, 0, 0.8)';
+            
+            setTimeout(function() {
+                button.textContent = originalText;
+                button.style.background = 'rgba(255,255,255,0.2)';
+            }, 2000);
+        }
+
+        function editPrompt(promptId) {
+            var prompt = userPrompts.find(function(p) { return p.id === promptId; });
+            if (!prompt) return;
+
+            // Fill form with existing data
+            document.getElementById('promptTitle').value = prompt.title;
+            document.getElementById('promptCategory').value = prompt.category;
+            document.getElementById('promptBusinessUnit').value = prompt.businessUnit || '';
+            document.getElementById('promptText').value = prompt.text;
+            document.getElementById('promptDescription').value = prompt.description || '';
+            
+            editingPromptId = promptId;
+            showAddForm();
+            
+            // Scroll to form
+            document.getElementById('addPromptForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deletePrompt(promptId) {
+            if (confirm('Are you sure you want to delete this prompt?')) {
+                userPrompts = userPrompts.filter(function(p) { return p.id !== promptId; });
+                sharedPrompts = sharedPrompts.filter(function(p) { return p.id !== promptId; });
+                localStorage.setItem('telusUserPromptsV2', JSON.stringify(userPrompts));
+                localStorage.setItem('telusSharedPromptsV2', JSON.stringify(sharedPrompts));
+                displayUserPrompts();
+                displayBusinessUnitPrompts();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            var sharedCount = sharedPrompts.length;
+            document.getElementById('myPromptsCount').textContent = userPrompts.length;
+            document.getElementById('sharedPromptsCount').textContent = sharedCount;
+            document.getElementById('totalPrompts').textContent = 12 + userPrompts.length + sharedCount;
+        }
+    </script>
+</body>
+</html>

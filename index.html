@@ -449,5 +449,293 @@
                     <p>Create custom prompts in addition to those loaded from Google Sheets.</p>
                     <button class="add-prompt-btn" onclick="toggleAddForm()">➕ Add New Prompt</button>
                 </div>
+<div id="addPromptForm" class="form-section">
+                    <h3 style="color: #4B0082; margin-top: 0;">New Prompt Details</h3>
+                    <form onsubmit="savePrompt(event)">
+                        <div class="form-group">
+                            <label for="promptTitle">Prompt Title *</label>
+                            <input type="text" id="promptTitle" required placeholder="e.g., Cold Email for SaaS Prospects">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptCategory">Category *</label>
+                            <select id="promptCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Prospecting">Prospecting</option>
+                                <option value="Account Planning">Account Planning</option>
+                                <option value="Deal Planning">Deal Planning</option>
+                                <option value="Objection Handling">Objection Handling</option>
+                                <option value="Meeting Prep">Meeting Prep</option>
+                                <option value="Competitive Strategy">Competitive Strategy</option>
+                                <option value="Proposals">Proposals</option>
+                                <option value="Follow-up">Follow-up</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptBusinessUnit">Business Unit (for sharing)</label>
+                            <select id="promptBusinessUnit">
+                                <option value="">General (All Units)</option>
+                                <option value="Consumer Goods">Consumer Goods</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Digital Solutions">Digital Solutions</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptText">Prompt Text *</label>
+                            <textarea id="promptText" required placeholder="Enter your prompt here. Use [brackets] for customizable fields like [Company Name], [Product], etc."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptDescription">Description (optional)</label>
+                            <textarea id="promptDescription" rows="3" placeholder="Brief description of when and how to use this prompt"></textarea>
+                        </div>
+                        
+                        <div>
+                            <button type="submit" class="btn">💾 Save Prompt</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelAddForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
 
-                <div id="addPrompt
+                <div id="userPromptsContainer">
+                    <!-- User prompts will be displayed here -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 TELUS Corporation. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            <p>Powered by FueliX - TELUS Generative AI Platform | <strong>Version 3.0 - Google Sheets Integration</strong></p>
+        </div>
+    </div>
+
+    <script>
+        // Google Sheets Data - Your prompts from the spreadsheet
+        const GOOGLE_SHEETS_DATA = [
+            {
+                "ID": "AG-001",
+                "Title": "Agricultural Producer Outreach",
+                "Category": "Prospecting",
+                "BusinessUnit": "Agriculture",
+                "PromptText": "Act as an expert TELUS sales professional specializing in Agriculture technology solutions. Help me with outreach to large-scale agricultural producers and agribusiness operations.\n\nContext:\n- Business Unit: TELUS Agriculture\n- Target: Large-scale crop/livestock producers, agribusiness conglomerates, agricultural cooperatives\n- Focus: Data-driven insights, precision agriculture, supply chain optimization\n\nProvide:\n1. Outreach framework for agricultural producers\n2. Key pain points in modern farming operations\n3. Questions about current farming challenges\n4. Value proposition for agricultural operations\n5. Success metrics for producer engagement\n\nFocus areas:\n- Precision agriculture and data analytics\n- Supply chain traceability\n- Sustainability and regulatory compliance\n- Yield optimization and cost reduction\n\nCustomize for:\n- Operation type: [Crop/Livestock/Mixed]\n- Geographic scope: [Regional/National/International]\n- Technology adoption: [Traditional/Emerging/Advanced]",
+                "Description": "Comprehensive outreach framework for large-scale agricultural producers and agribusiness operations",
+                "Author": "TELUS Team",
+                "DateCreated": "2025-07-17"
+            },
+            {
+                "ID": "AG-002",
+                "Title": "Sustainability & ESG Outreach",
+                "Category": "Sustainability",
+                "BusinessUnit": "Agriculture",
+                "PromptText": "Act as an expert TELUS sales professional specializing in Agriculture technology solutions with a focus on sustainability and ESG compliance.\n\nContext:\n- Business Unit: TELUS Agriculture\n- Target: Companies across agricultural value chain with strong sustainability commitments\n- Focus: ESG reporting, carbon footprint reduction, sustainable sourcing\n\nProvide:\n1. Sustainability-focused outreach strategies\n2. Value propositions for ESG compliance\n3. Questions about sustainability goals and challenges\n4. Best practices for sustainability relationships\n5. Success metrics for sustainability partnerships\n\nFocus areas:\n- Carbon footprint measurement and reduction\n- Regenerative agriculture practices\n- Sustainable sourcing and transparency\n- ESG reporting and compliance\n- Water usage and waste reduction\n\nCustomize for:\n- Sustainability focus: [Carbon/Water/Biodiversity/Social]\n- Regulatory requirements: [EU taxonomy/SEC reporting/Voluntary]\n- Stakeholder pressure: [Investors/Consumers/Regulators]",
+                "Description": "Sustainability and ESG-focused outreach for agricultural value chain companies",
+                "Author": "TELUS Team",
+                "DateCreated": "2025-07-17"
+            },
+            {
+                "ID": "CG-001",
+                "Title": "CPG Manufacturer Outreach",
+                "Category": "Prospecting",
+                "BusinessUnit": "Consumer Goods",
+                "PromptText": "Act as an expert TELUS sales professional specializing in Consumer Goods technology solutions. Help me with cold outreach to Consumer Packaged Goods (CPG) manufacturers.\n\nContext:\n- Business Unit: TELUS Consumer Goods\n- Target: CPG Manufacturers (Beverage, Protein, Health & Hygiene, Baked Goods)\n- Focus: Trade promotion management and distribution optimization\n\nProvide:\n1. Outreach framework for CPG manufacturers\n2. Key pain points in retail/food service distribution\n3. Questions about their trade promotion challenges\n4. Value proposition for manufacturing operations\n5. Success metrics for manufacturer engagement\n\nFocus areas:\n- Trade promotion efficiency\n- Multi-channel distribution (retail & food service)\n- Supply chain optimization\n- Integration with existing ERP/trade systems\n\nCustomize for:\n- Manufacturer category: [Beverage/Protein/Health & Hygiene/Baked Goods]\n- Company size: [Regional/National/Multinational]\n- Current trade system: [Manual/Legacy/Advanced]",
+                "Description": "Cold outreach framework for Consumer Packaged Goods manufacturers",
+                "Author": "TELUS Team",
+                "DateCreated": "2025-07-17"
+            },
+            {
+                "ID": "General-001",
+                "Title": "Territory Funnel Analysis & Strategy",
+                "Category": "Territory Planning",
+                "BusinessUnit": "General",
+                "PromptText": "My funnel is [Bloated/Anemic/Stagnant/Unqualified]. Help me identify five Funnel Building or progression strategies to use in my Territory Plan.\n\nProvide the answers in a tabular view with:\n- Column 1: Funnel Build title\n- Column 2: Details associated with the strategy\n- Column 3: Typical KPIs associated with the idea\n\nFocus on actionable strategies that can be implemented within the next 90 days. Include both short-term fixes and long-term funnel health improvements.\n\nAdditional context:\n- Territory size: [Add details]\n- Current funnel state: [Describe specific issues]\n- Target market: [Consumer Goods/Agriculture/Other]\n- Resources available: [Team size, budget, tools]",
+                "Description": "Territory planning and funnel optimization strategies for sales professionals",
+                "Author": "TELUS Team",
+                "DateCreated": "2025-07-17"
+            }
+        ];
+
+        // User prompts storage
+        var userPrompts = JSON.parse(localStorage.getItem('telusUserPromptsV3')) || [];
+        var sharedPrompts = JSON.parse(localStorage.getItem('telusSharedPromptsV3')) || [];
+        var editingPromptId = null;
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGoogleSheetsPrompts();
+            updateStats();
+            displayUserPrompts();
+        });
+
+        function loadGoogleSheetsPrompts() {
+            displayPromptsInTab('agriculture', 'Agriculture');
+            displayPromptsInTab('consumer-goods', 'Consumer Goods');
+            displayPromptsInTab('general', 'General');
+        }
+
+        function displayPromptsInTab(tabId, businessUnit) {
+            const container = document.getElementById(tabId === 'agriculture' ? 'agriculturePrompts' : 
+                                                   tabId === 'consumer-goods' ? 'consumerGoodsPrompts' : 'generalPrompts');
+            
+            const filteredPrompts = GOOGLE_SHEETS_DATA.filter(prompt => {
+                if (businessUnit === 'General') {
+                    return prompt.BusinessUnit === 'General' || !prompt.BusinessUnit;
+                }
+                return prompt.BusinessUnit === businessUnit;
+            });
+
+            let html = '';
+            filteredPrompts.forEach(prompt => {
+                html += `
+                    <div class="prompt-card">
+                        <div class="prompt-header">
+                            <span>
+                                <span class="business-unit-tag">${prompt.BusinessUnit}</span>
+                                <span class="category-tag">${prompt.Category}</span>
+                                <span class="sheets-tag">Google Sheets</span>
+                                ${prompt.Title}
+                            </span>
+                            <button class="copy-btn" onclick="copyText('${prompt.ID}')">Copy</button>
+                        </div>
+                        <div class="prompt-content">
+                            ${prompt.Description ? `<p style="margin-top: 0; color: #64748b; font-style: italic;">${prompt.Description}</p>` : ''}
+                            <div class="prompt-text" id="${prompt.ID}">${prompt.PromptText}</div>
+                            <div style="margin-top: 10px; font-size: 0.8em; color: #64748b;">
+                                Author: ${prompt.Author} | Created: ${new Date(prompt.DateCreated).toLocaleDateString()}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function showTab(tabName) {
+            // Hide all tabs
+            var tabs = document.querySelectorAll('.tab-content');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Remove active from nav buttons
+            var navTabs = document.querySelectorAll('.nav-tab');
+            for (var i = 0; i < navTabs.length; i++) {
+                navTabs[i].classList.remove('active');
+            }
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Make nav button active
+            event.target.classList.add('active');
+            
+            // Hide add form when switching tabs
+            if (tabName !== 'my-prompts') {
+                hideAddForm();
+            }
+        }
+
+        function copyText(elementId) {
+            var element = document.getElementById(elementId);
+            var text = element.textContent || element.innerText;
+            
+            // Create temporary textarea
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            
+            // Select and copy
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Remove temporary element
+            document.body.removeChild(textarea);
+            
+            // Show feedback
+            var button = event.target;
+            var originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.background = 'rgba(102, 204, 0, 0.8)';
+            
+            setTimeout(function() {
+                button.textContent = originalText;
+                button.style.background = 'rgba(255,255,255,0.2)';
+            }, 2000);
+        }
+
+        function toggleAddForm() {
+            var form = document.getElementById('addPromptForm');
+            if (form.classList.contains('active')) {
+                hideAddForm();
+            } else {
+                showAddForm();
+            }
+        }
+
+        function showAddForm() {
+            document.getElementById('addPromptForm').classList.add('active');
+            document.querySelector('.add-prompt-btn').textContent = '❌ Cancel';
+        }
+
+        function hideAddForm() {
+            document.getElementById('addPromptForm').classList.remove('active');
+            document.querySelector('.add-prompt-btn').textContent = '➕ Add New Prompt';
+            clearForm();
+        }
+
+        function cancelAddForm() {
+            hideAddForm();
+        }
+
+        function clearForm() {
+            document.getElementById('promptTitle').value = '';
+            document.getElementById('promptCategory').value = '';
+            document.getElementById('promptBusinessUnit').value = '';
+            document.getElementById('promptText').value = '';
+            document.getElementById('promptDescription').value = '';
+            editingPromptId = null;
+        }
+
+        function savePrompt(event) {
+            event.preventDefault();
+            
+            var promptData = {
+                id: editingPromptId || 'user-' + Date.now(),
+                title: document.getElementById('promptTitle').value,
+                category: document.getElementById('promptCategory').value,
+                businessUnit: document.getElementById('promptBusinessUnit').value,
+                text: document.getElementById('promptText').value,
+                description: document.getElementById('promptDescription').value,
+                dateCreated: editingPromptId ? 
+                    userPrompts.find(function(p) { return p.id === editingPromptId; }).dateCreated : 
+                    new Date().toISOString(),
+                dateModified: new Date().toISOString(),
+                author: 'Current User'
+            };
+
+            if (editingPromptId) {
+                var index = userPrompts.findIndex(function(p) { return p.id === editingPromptId; });
+                userPrompts[index] = promptData;
+            } else {
+                userPrompts.push(promptData);
+            }
+
+            localStorage.setItem('telusUserPromptsV3', JSON.stringify(userPrompts));
+            
+            displayUserPrompts();
+            updateStats();
+            hideAddForm();
+            
+            alert('Prompt saved successfully!');
+        }
+
+        function displayUserPrompts() {
+            var container = document.getElementById('userPromptsContainer');
+            
+            if (userPrompts.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No custom prompts yet</h3><p>Click "Add New Prompt" to create your first custom prompt
+            

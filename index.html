@@ -624,3 +624,144 @@
 
         function toggleAddForm() {
             var form = document.getElementById('addPrompt
+function toggleAddForm() {
+            var form = document.getElementById('addPromptForm');
+            if (form.classList.contains('active')) {
+                hideAddForm();
+            } else {
+                showAddForm();
+            }
+        }
+
+        function showAddForm() {
+            document.getElementById('addPromptForm').classList.add('active');
+            document.querySelector('.add-prompt-btn').textContent = '❌ Cancel';
+        }
+
+        function hideAddForm() {
+            document.getElementById('addPromptForm').classList.remove('active');
+            document.querySelector('.add-prompt-btn').textContent = '➕ Add New Prompt';
+            clearForm();
+        }
+
+        function cancelAddForm() {
+            hideAddForm();
+        }
+
+        function clearForm() {
+            document.getElementById('promptTitle').value = '';
+            document.getElementById('promptCategory').value = '';
+            document.getElementById('promptBusinessUnit').value = '';
+            document.getElementById('promptText').value = '';
+            document.getElementById('promptDescription').value = '';
+            editingPromptId = null;
+        }
+
+        function savePrompt(event) {
+            event.preventDefault();
+            
+            var promptData = {
+                id: editingPromptId || 'user-' + Date.now(),
+                title: document.getElementById('promptTitle').value,
+                category: document.getElementById('promptCategory').value,
+                businessUnit: document.getElementById('promptBusinessUnit').value,
+                text: document.getElementById('promptText').value,
+                description: document.getElementById('promptDescription').value,
+                dateCreated: editingPromptId ? 
+                    userPrompts.find(function(p) { return p.id === editingPromptId; }).dateCreated : 
+                    new Date().toISOString(),
+                dateModified: new Date().toISOString(),
+                author: 'Current User'
+            };
+
+            if (editingPromptId) {
+                var index = userPrompts.findIndex(function(p) { return p.id === editingPromptId; });
+                userPrompts[index] = promptData;
+            } else {
+                userPrompts.push(promptData);
+            }
+
+            localStorage.setItem('telusUserPromptsV3', JSON.stringify(userPrompts));
+            
+            displayUserPrompts();
+            updateStats();
+            hideAddForm();
+            
+            alert('Prompt saved successfully!');
+        }
+
+        function displayUserPrompts() {
+            var container = document.getElementById('userPromptsContainer');
+            
+            if (userPrompts.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No custom prompts yet</h3><p>Click "Add New Prompt" to create your first custom prompt!</p></div>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < userPrompts.length; i++) {
+                var prompt = userPrompts[i];
+                
+                html += '<div class="prompt-card">';
+                html += '<div class="prompt-header">';
+                html += '<span>';
+                if (prompt.businessUnit) {
+                    html += '<span class="business-unit-tag">' + prompt.businessUnit + '</span>';
+                }
+                html += '<span class="category-tag">' + prompt.category + '</span>';
+                html += '<span class="user-tag">Custom</span>';
+                html += prompt.title;
+                html += '</span>';
+                html += '<div>';
+                html += '<button class="copy-btn" onclick="copyUserPrompt(\'' + prompt.id + '\')">Copy</button>';
+                html += '<button class="edit-btn" onclick="editPrompt(\'' + prompt.id + '\')">Edit</button>';
+                html += '<button class="delete-btn" onclick="deletePrompt(\'' + prompt.id + '\')">Delete</button>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="prompt-content">';
+                if (prompt.description) {
+                    html += '<p style="margin-top: 0; color: #64748b; font-style: italic;">' + prompt.description + '</p>';
+                }
+                html += '<div class="prompt-text" id="' + prompt.id + '">' + prompt.text + '</div>';
+                html += '</div>';
+                html += '</div>';
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function copyUserPrompt(promptId) {
+            copyText(promptId);
+        }
+
+        function editPrompt(promptId) {
+            var prompt = userPrompts.find(function(p) { return p.id === promptId; });
+            if (!prompt) return;
+
+            document.getElementById('promptTitle').value = prompt.title;
+            document.getElementById('promptCategory').value = prompt.category;
+            document.getElementById('promptBusinessUnit').value = prompt.businessUnit || '';
+            document.getElementById('promptText').value = prompt.text;
+            document.getElementById('promptDescription').value = prompt.description || '';
+            
+            editingPromptId = promptId;
+            showAddForm();
+        }
+
+        function deletePrompt(promptId) {
+            if (confirm('Are you sure you want to delete this prompt?')) {
+                userPrompts = userPrompts.filter(function(p) { return p.id !== promptId; });
+                localStorage.setItem('telusUserPromptsV3', JSON.stringify(userPrompts));
+                displayUserPrompts();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalPrompts').textContent = GOOGLE_SHEETS_DATA.length + userPrompts.length;
+            document.getElementById('sheetsPrompts').textContent = GOOGLE_SHEETS_DATA.length;
+            document.getElementById('myPromptsCount').textContent = userPrompts.length;
+        }
+    </script>
+</body>
+</html>

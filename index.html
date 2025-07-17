@@ -451,3 +451,176 @@
                 </div>
 
                 <div id="addPromptForm" class="form-section">
+                    <h3 style="color: #4B0082; margin-top: 0;">New Prompt Details</h3>
+                    <form onsubmit="savePrompt(event)">
+                        <div class="form-group">
+                            <label for="promptTitle">Prompt Title *</label>
+                            <input type="text" id="promptTitle" required placeholder="e.g., Cold Email for SaaS Prospects">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptCategory">Category *</label>
+                            <select id="promptCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Prospecting">Prospecting</option>
+                                <option value="Account Planning">Account Planning</option>
+                                <option value="Deal Planning">Deal Planning</option>
+                                <option value="Objection Handling">Objection Handling</option>
+                                <option value="Meeting Prep">Meeting Prep</option>
+                                <option value="Competitive Strategy">Competitive Strategy</option>
+                                <option value="Proposals">Proposals</option>
+                                <option value="Follow-up">Follow-up</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptBusinessUnit">Business Unit (for sharing)</label>
+                            <select id="promptBusinessUnit">
+                                <option value="">General (All Units)</option>
+                                <option value="Consumer Goods">Consumer Goods</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Digital Solutions">Digital Solutions</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptText">Prompt Text *</label>
+                            <textarea id="promptText" required placeholder="Enter your prompt here. Use [brackets] for customizable fields like [Company Name], [Product], etc."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="promptDescription">Description (optional)</label>
+                            <textarea id="promptDescription" rows="3" placeholder="Brief description of when and how to use this prompt"></textarea>
+                        </div>
+                        
+                        <div>
+                            <button type="submit" class="btn">💾 Save Prompt</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelAddForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="userPromptsContainer">
+                    <!-- User prompts will be displayed here -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 TELUS Corporation. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            <p>Powered by FueliX - TELUS Generative AI Platform | <strong>Version 3.0 - Google Sheets Integration</strong></p>
+        </div>
+    </div>
+
+    <script>
+        // Google Sheets Data - ALL your prompts from the spreadsheet
+        const GOOGLE_SHEETS_DATA = [
+            {"ID": "AG-001", "Title": "Agricultural Producer Outreach", "Category": "Prospecting", "BusinessUnit": "Agriculture", "PromptText": "Act as an expert TELUS sales professional specializing in Agriculture technology solutions. Help me with outreach to large-scale agricultural producers and agribusiness operations.\n\nContext:\n- Business Unit: TELUS Agriculture\n- Target: Large-scale crop/livestock producers, agribusiness conglomerates, agricultural cooperatives\n- Focus: Data-driven insights, precision agriculture, supply chain optimization\n\nProvide:\n1. Outreach framework for agricultural producers\n2. Key pain points in modern farming operations\n3. Questions about current farming challenges\n4. Value proposition for agricultural operations\n5. Success metrics for producer engagement\n\nFocus areas:\n- Precision agriculture and data analytics\n- Supply chain traceability\n- Sustainability and regulatory compliance\n- Yield optimization and cost reduction\n\nCustomize for:\n- Operation type: [Crop/Livestock/Mixed]\n- Geographic scope: [Regional/National/International]\n- Technology adoption: [Traditional/Emerging/Advanced]", "Description": "Comprehensive outreach framework for large-scale agricultural producers and agribusiness operations", "Author": "TELUS Team", "DateCreated": "2025-07-17"},
+            {"ID": "AG-002", "Title": "Sustainability & ESG Outreach", "Category": "Sustainability", "BusinessUnit": "Agriculture", "PromptText": "Act as an expert TELUS sales professional specializing in Agriculture technology solutions with a focus on sustainability and ESG compliance.\n\nContext:\n- Business Unit: TELUS Agriculture\n- Target: Companies across agricultural value chain with strong sustainability commitments\n- Focus: ESG reporting, carbon footprint reduction, sustainable sourcing\n\nProvide:\n1. Sustainability-focused outreach strategies\n2. Value propositions for ESG compliance\n3. Questions about sustainability goals and challenges\n4. Best practices for sustainability relationships\n5. Success metrics for sustainability partnerships\n\nFocus areas:\n- Carbon footprint measurement and reduction\n- Regenerative agriculture practices\n- Sustainable sourcing and transparency\n- ESG reporting and compliance\n- Water usage and waste reduction\n\nCustomize for:\n- Sustainability focus: [Carbon/Water/Biodiversity/Social]\n- Regulatory requirements: [EU taxonomy/SEC reporting/Voluntary]\n- Stakeholder pressure: [Investors/Consumers/Regulators]", "Description": "Sustainability and ESG-focused outreach for agricultural value chain companies", "Author": "TELUS Team", "DateCreated": "2025-07-17"},
+            {"ID": "AG-003", "Title": "Food Safety & Regulatory Compliance Outreach", "Category": "Prospecting", "BusinessUnit": "Agriculture", "PromptText": "Act as an expert TELUS sales professional specializing in Agriculture technology solutions with a focus on food safety and regulatory compliance.\n\nContext:\n- Business Unit: TELUS Agriculture\n- Target: Food producers, processors, distributors facing regulatory compliance challenges\n- Focus: Food safety management, traceability, regulatory reporting, audit preparation\n\nProvide:\n1. Outreach framework for compliance-focused agricultural businesses\n2. Key pain points in food safety management and regulatory reporting\n3. Questions about current compliance processes and challenges\n4. Value proposition for automated compliance and traceability solutions\n5. Success metrics for food safety and compliance partnerships\n\nFocus areas:\n- End-to-end traceability from farm to consumer\n- Automated compliance reporting and documentation\n- Real-time monitoring and alert systems\n- Audit preparation and regulatory readiness\n- Supply chain transparency and verification\n\nCustomize for:\n- Regulatory framework: [FDA/USDA/CFIA/EU regulations]\n- Company type: [Producer/Processor/Distributor/Retailer]\n- Compliance maturity: [Manual processes/Partial automation/Advanced systems]\n- Geographic scope: [Local/Regional/National/International]", "Description": "Comprehensive approach for food safety and regulatory compliance challenges", "Author": "TELUS Team", "DateCreated": "2025-07-17"},
+            {"ID": "CG-001", "Title": "CPG Manufacturer Outreach", "Category": "Prospecting", "BusinessUnit": "Consumer Goods", "PromptText": "Act as an expert TELUS sales professional specializing in Consumer Goods technology solutions. Help me with cold outreach to Consumer Packaged Goods (CPG) manufacturers.\n\nContext:\n- Business Unit: TELUS Consumer Goods\n- Target: CPG Manufacturers (Beverage, Protein, Health & Hygiene, Baked Goods)\n- Focus: Trade promotion management and distribution optimization\n\nProvide:\n1. Outreach framework for CPG manufacturers\n2. Key pain points in retail/food service distribution\n3. Questions about their trade promotion challenges\n4. Value proposition for manufacturing operations\n5. Success metrics for manufacturer engagement\n\nFocus areas:\n- Trade promotion efficiency\n- Multi-channel distribution (retail & food service)\n- Supply chain optimization\n- Integration with existing ERP/trade systems\n\nCustomize for:\n- Manufacturer category: [Beverage/Protein/Health & Hygiene/Baked Goods]\n- Company size: [Regional/National/Multinational]\n- Current trade system: [Manual/Legacy/Advanced]", "Description": "Cold outreach framework for Consumer Packaged Goods manufacturers", "Author": "TELUS Team", "DateCreated": "2025-07-17"},
+            {"ID": "CG-002", "Title": "Sales Agency Partnerships", "Category": "Channel Partners", "BusinessUnit": "Consumer Goods", "PromptText": "Act as an expert TELUS sales professional specializing in Consumer Goods technology solutions. Help me develop partnerships with sales agencies and brokers who represent CPG manufacturers.\n\nContext:\n- Business Unit: TELUS Consumer Goods\n- Target: Sales Agencies and Brokers representing CPG manufacturers\n- Objective: Partner with agencies to reach their manufacturer clients\n\nProvide:\n1. Agency partnership strategies\n2. Value propositions for agency relationships\n3. Questions about their manufacturer client base\n4. Joint sales approaches and co-selling\n5. Success metrics for agency partnerships\n\nFocus areas:\n- How our TELUS solutions benefit their manufacturer clients\n- Commission and partnership structures\n- Training and support for agency teams\n- Lead sharing and opportunity management\n\nCustomize for:\n- Agency specialization: [Food & Beverage/Health & Beauty/General CPG]\n- Geographic territory: [Regional/National]\n- Client portfolio: [Manufacturer types they represent]", "Description": "Partnership development strategies for sales agencies and brokers in CPG space", "Author": "TELUS Team", "DateCreated": "2025-07-17"},
+            {"ID": "General-001", "Title": "Territory Funnel Analysis & Strategy", "Category": "Territory Planning", "BusinessUnit": "General", "PromptText": "My funnel is [Bloated/Anemic/Stagnant/Unqualified]. Help me identify five Funnel Building or progression strategies to use in my Territory Plan.\n\nProvide the answers in a tabular view with:\n- Column 1: Funnel Build title\n- Column 2: Details associated with the strategy\n- Column 3: Typical KPIs associated with the idea\n\nFocus on actionable strategies that can be implemented within the next 90 days. Include both short-term fixes and long-term funnel health improvements.\n\nAdditional context:\n- Territory size: [Add details]\n- Current funnel state: [Describe specific issues]\n- Target market: [Consumer Goods/Agriculture/Other]\n- Resources available: [Team size, budget, tools]", "Description": "Territory planning and funnel optimization strategies for sales professionals", "Author": "TELUS Team", "DateCreated": "2025-07-17"},
+            {"ID": "General-002", "Title": "Industry Trends & Market Analysis", "Category": "Account Planning", "BusinessUnit": "General", "PromptText": "For [Company] summarize the key industry or market trends that will impact their business for 2025 and 2026.\n\nClassify these trends as either:\n- Demographic\n- Regulatory\n- Social\n- Technology\n- Business process change\n\nPresent the information in a format that can be used in an Account Plan. Include:\n1. Trend description and impact timeline\n2. Potential business implications (positive/negative)\n3. How our TELUS solutions can help address these trends\n4. Recommended discussion points for client conversations\n\nAdditional context:\n- Company industry: [Specify sector]\n- Company size: [Revenue/employees]\n- Geographic focus: [Regional/National/Global]\n- Current challenges: [Known pain points]", "Description": "Industry and market trend analysis for account planning and client conversations", "Author": "TELUS Team", "DateCreated": "2025-07-17"}
+        ];
+
+        // User prompts storage
+        var userPrompts = JSON.parse(localStorage.getItem('telusUserPromptsV3')) || [];
+        var editingPromptId = null;
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGoogleSheetsPrompts();
+            updateStats();
+            displayUserPrompts();
+        });
+
+        function loadGoogleSheetsPrompts() {
+            displayPromptsInTab('agriculture', 'Agriculture');
+            displayPromptsInTab('consumer-goods', 'Consumer Goods');
+            displayPromptsInTab('general', 'General');
+        }
+
+        function displayPromptsInTab(tabId, businessUnit) {
+            const container = document.getElementById(tabId === 'agriculture' ? 'agriculturePrompts' : 
+                                                   tabId === 'consumer-goods' ? 'consumerGoodsPrompts' : 'generalPrompts');
+            
+            const filteredPrompts = GOOGLE_SHEETS_DATA.filter(prompt => {
+                if (businessUnit === 'General') {
+                    return prompt.BusinessUnit === 'General' || !prompt.BusinessUnit;
+                }
+                return prompt.BusinessUnit === businessUnit;
+            });
+
+            let html = '';
+            filteredPrompts.forEach(prompt => {
+                html += `
+                    <div class="prompt-card">
+                        <div class="prompt-header">
+                            <span>
+                                <span class="business-unit-tag">${prompt.BusinessUnit}</span>
+                                <span class="category-tag">${prompt.Category}</span>
+                                <span class="sheets-tag">Google Sheets</span>
+                                ${prompt.Title}
+                            </span>
+                            <button class="copy-btn" onclick="copyText('${prompt.ID}')">Copy</button>
+                        </div>
+                        <div class="prompt-content">
+                            ${prompt.Description ? `<p style="margin-top: 0; color: #64748b; font-style: italic;">${prompt.Description}</p>` : ''}
+                            <div class="prompt-text" id="${prompt.ID}">${prompt.PromptText}</div>
+                            <div style="margin-top: 10px; font-size: 0.8em; color: #64748b;">
+                                Author: ${prompt.Author} | Created: ${new Date(prompt.DateCreated).toLocaleDateString()}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function showTab(tabName) {
+            var tabs = document.querySelectorAll('.tab-content');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            var navTabs = document.querySelectorAll('.nav-tab');
+            for (var i = 0; i < navTabs.length; i++) {
+                navTabs[i].classList.remove('active');
+            }
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tabName !== 'my-prompts') {
+                hideAddForm();
+            }
+        }
+
+        function copyText(elementId) {
+            var element = document.getElementById(elementId);
+            var text = element.textContent || element.innerText;
+            
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            var button = event.target;
+            var originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.background = 'rgba(102, 204, 0, 0.8)';
+            
+            setTimeout(function() {
+                button.textContent = originalText;
+                button.style.background = 'rgba(255,255,255,0.2)';
+            }, 2000);
+        }
+
+        function toggleAddForm() {
+            var form = document.getElementById('addPrompt

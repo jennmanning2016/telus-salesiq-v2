@@ -1,2 +1,2 @@
-# teslus-salesiq-v2
+# telus-salesiq-v2
 TELUS SalesIQ V2 - Team Collaboration Features
